@@ -1,5 +1,7 @@
-# computus
-Computus easter calculation in Rust
+# Computus
+![Clippy Linting Result](https://clippy.bashy.io/github/dten/computus/master/badge.svg)
+
+Computus Easter calculation in Rust
 
 ## Usage
 
@@ -16,7 +18,7 @@ and this to your crate root:
 extern crate computus;
 ```
 
-then you can find when Easter is for a particular year with
+then you can find when Easter is for a particular year with:
 
 ```rust
 // For Gregorian calendars
