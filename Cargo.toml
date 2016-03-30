@@ -3,7 +3,7 @@ name = "computus"
 version = "0.1.0"
 authors = ["David Hewson <dev@daveid.co.uk>"]
 
-description = "Computus easter calculation in Rust"
+description = "Computus Easter calculation in Rust"
 homepage = "https://github.com/dten/computus"
 repository = "https://github.com/dten/computus"
 keywords = ["easter", "date", "calendar", "gregorian", "julian"]
