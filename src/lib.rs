@@ -1,20 +1,20 @@
 pub mod gregorian {
     /// Easter in the Gregorian calendar
     pub fn month_day(year: i32) -> (u32, u32) {
-        let a: i32 = year % 19;
-        let b: i32 = year / 100;
-        let c: i32 = year % 100;
-        let d: i32 = b / 4;
-        let e: i32 = b % 4;
-        let f: i32 = (b + 8) / 25;
-        let g: i32 = (b - f + 1) / 3;
-        let h: i32 = (19 * a + b - d - g + 15) % 30;
-        let i: i32 = c / 4;
-        let k: i32 = c % 4;
-        let l: i32 = (32 + 2 * e + 2 * i - h - k) % 7;
-        let m: i32 = (a + 11 * h + 22 * l) / 451;
-        let month: i32 = (h + l - 7 * m + 114) / 31;
-        let day: i32 = (h + l - 7 * m + 114) % 31 + 1;
+        let a = year % 19;
+        let b = year / 100;
+        let c = year % 100;
+        let d = b / 4;
+        let e = b % 4;
+        let f = (b + 8) / 25;
+        let g = (b - f + 1) / 3;
+        let h = (19 * a + b - d - g + 15) % 30;
+        let i = c / 4;
+        let k = c % 4;
+        let l = (32 + 2 * e + 2 * i - h - k) % 7;
+        let m = (a + 11 * h + 22 * l) / 451;
+        let month = (h + l - 7 * m + 114) / 31;
+        let day = (h + l - 7 * m + 114) % 31 + 1;
         (month as u32, day as u32)
     }
 }
@@ -22,14 +22,14 @@ pub mod gregorian {
 pub mod julian {
     /// Easter in the Julian calendar
     pub fn month_day(year: i32) -> (u32, u32) {
-        let a: i32 = year % 4;
-        let b: i32 = year % 7;
-        let c: i32 = year % 19;
-        let d: i32 = (19 * c + 15) % 30;
-        let e: i32 = (2 * a + 4 * b - d + 34) % 7;
-        let f: i32 = d + e + 114;
-        let month: i32 = f / 31;
-        let day: i32 = f % 31 + 1;
+        let a = year % 4;
+        let b = year % 7;
+        let c = year % 19;
+        let d = (19 * c + 15) % 30;
+        let e = (2 * a + 4 * b - d + 34) % 7;
+        let f = d + e + 114;
+        let month = f / 31;
+        let day = f % 31 + 1;
         (month as u32, day as u32)
     }
 }
