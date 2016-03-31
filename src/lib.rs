@@ -1,6 +1,13 @@
+fn check_easter_happened(year: i32) {
+    if year < 33 {
+        panic!(format!("Jesus isn't dead yet in the year {}", year));
+    }
+}
+
 pub mod gregorian {
     /// Easter in the Gregorian calendar
     pub fn month_day(year: i32) -> (u32, u32) {
+        super::check_easter_happened(year);
         let a = year % 19;
         let b = year / 100;
         let c = year % 100;
@@ -22,6 +29,7 @@ pub mod gregorian {
 pub mod julian {
     /// Easter in the Julian calendar
     pub fn month_day(year: i32) -> (u32, u32) {
+        super::check_easter_happened(year);
         let a = year % 4;
         let b = year % 7;
         let c = year % 19;
