@@ -17,54 +17,49 @@ impl Date {
 
 const OUT_OF_RANGE_ERR: &'static str = "Computus is only valid from 1583 to 9999";
 
-pub mod gregorian {
-    /// Easter in the Gregorian calendar
-    pub fn month_day(year: i32) -> Result<::Date, &'static str> {
-        if year < 1583 || year > 9999 {
-            return Err(::OUT_OF_RANGE_ERR);
-        }
-        let aa = year % 19;
-        let bb = year / 100;
-        let cc = year % 100;
-        let dd = bb / 4;
-        let ee = bb % 4;
-        let ff = (bb + 8) / 25;
-        let gg = (bb - ff + 1) / 3;
-        let hh = (19 * aa + bb - dd - gg + 15) % 30;
-        let ii = cc / 4;
-        let kk = cc % 4;
-        let ll = (32 + 2 * ee + 2 * ii - hh - kk) % 7;
-        let mm = (aa + 11 * hh + 22 * ll) / 451;
-        let month = (hh + ll - 7 * mm + 114) / 31;
-        let day = (hh + ll - 7 * mm + 114) % 31 + 1;
-        Ok(::Date::ymd(year, month as u32, day as u32))
+/// Easter in the Gregorian calendar
+pub fn gregorian(year: i32) -> Result<::Date, &'static str> {
+    if year < 1583 || year > 9999 {
+        return Err(::OUT_OF_RANGE_ERR);
     }
+    let aa = year % 19;
+    let bb = year / 100;
+    let cc = year % 100;
+    let dd = bb / 4;
+    let ee = bb % 4;
+    let ff = (bb + 8) / 25;
+    let gg = (bb - ff + 1) / 3;
+    let hh = (19 * aa + bb - dd - gg + 15) % 30;
+    let ii = cc / 4;
+    let kk = cc % 4;
+    let ll = (32 + 2 * ee + 2 * ii - hh - kk) % 7;
+    let mm = (aa + 11 * hh + 22 * ll) / 451;
+    let month = (hh + ll - 7 * mm + 114) / 31;
+    let day = (hh + ll - 7 * mm + 114) % 31 + 1;
+    Ok(::Date::ymd(year, month as u32, day as u32))
 }
 
-pub mod julian {
-    /// Easter in the Julian calendar
-    pub fn month_day(year: i32) -> Result<::Date, &'static str> {
-        if year < 1583 || year > 9999 {
-            return Err(::OUT_OF_RANGE_ERR);
-        }
-        let aa = year % 4;
-        let bb = year % 7;
-        let cc = year % 19;
-        let dd = (19 * cc + 15) % 30;
-        let ee = (2 * aa + 4 * bb - dd + 34) % 7;
-        let ff = dd + ee + 114;
-        let month = ff / 31;
-        let day = ff % 31 + 1;
-        Ok(::Date::ymd(year, month as u32, day as u32))
+/// Easter in the Julian calendar
+pub fn julian(year: i32) -> Result<::Date, &'static str> {
+    if year < 1583 || year > 9999 {
+        return Err(::OUT_OF_RANGE_ERR);
     }
+    let aa = year % 4;
+    let bb = year % 7;
+    let cc = year % 19;
+    let dd = (19 * cc + 15) % 30;
+    let ee = (2 * aa + 4 * bb - dd + 34) % 7;
+    let ff = dd + ee + 114;
+    let month = ff / 31;
+    let day = ff % 31 + 1;
+    Ok(::Date::ymd(year, month as u32, day as u32))
 }
 
 #[cfg(test)]
 mod tests {
     #[test]
     fn gregorian_month_day() {
-        use ::Date;
-        use super::gregorian::month_day as gregorian;
+        use super::{gregorian, Date};
         assert_eq!(gregorian(1961), Ok(Date::ymd(1961, 4, 2)));
         assert_eq!(gregorian(1996), Ok(Date::ymd(1996, 4, 7)));
         assert_eq!(gregorian(1997), Ok(Date::ymd(1997, 3, 30)));
@@ -99,8 +94,7 @@ mod tests {
 
     #[test]
     fn julian_month_day() {
-        use ::Date;
-        use super::julian::month_day as julian;
+        use super::{julian, Date};
         assert_eq!(julian(1961), Ok(Date::ymd(1961, 3, 27)));
         assert_eq!(julian(1996), Ok(Date::ymd(1996, 4, 1)));
         assert_eq!(julian(1997), Ok(Date::ymd(1997, 4, 14)));
