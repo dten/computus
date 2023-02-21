@@ -1,5 +1,6 @@
 # Computus
-[![Clippy Linting Result](https://clippy.bashy.io/github/dten/computus/master/badge.svg)](https://clippy.bashy.io/github/dten/computus/master/log)
+[![crates.io](https://img.shields.io/crates/v/computus.svg)](https://crates.io/crates/computus)
+[![Documentation](https://docs.rs/computus/badge.svg)](https://docs.rs/computus)
 
 Computus Easter calculation in Rust
 
