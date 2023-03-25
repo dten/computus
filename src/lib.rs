@@ -58,6 +58,13 @@ pub fn julian(year: i32) -> Result<Date, &'static str> {
     Ok(Date::ymd(year, month as u32, day as u32))
 }
 
+/// Easter in the Gregorian calendar. Requires `chrono` feature to provide a `chrono::NaiveDate`.
+#[cfg(feature = "chrono")]
+pub fn gregorian_naive(year: i32) -> Result<chrono::NaiveDate, &'static str> {
+    let Date { year, month, day } = gregorian(year)?;
+    chrono::NaiveDate::from_ymd_opt(year, month, day).ok_or("invalid date")
+}
+
 #[cfg(test)]
 mod tests {
     use rstest::rstest;
@@ -101,6 +108,15 @@ mod tests {
     fn gregorian_month_day(y: i32, m: u32, d: u32) {
         use super::{gregorian, Date};
         assert_eq!(gregorian(y), Ok(Date::ymd(y, m, d)));
+    }
+
+    #[cfg(feature = "chrono")]
+    #[apply(gregorian_data)]
+    fn gregorian_naive(y: i32, m: u32, d: u32) {
+        assert_eq!(
+            super::gregorian_naive(y),
+            Ok(chrono::NaiveDate::from_ymd_opt(y, m, d).unwrap())
+        );
     }
 
     #[rstest]

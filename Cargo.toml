@@ -12,6 +12,8 @@ license = "MIT"
 edition = "2021"
 
 [dependencies]
+chrono = { version = ">=0.2.0", optional = true }
+
 [dev-dependencies]
 rstest = { version = "0.17.0", defaut-features = false }
 rstest_reuse = { version = "0.5.0", defaut-features = false }
