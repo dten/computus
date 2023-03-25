@@ -9,5 +9,6 @@ repository = "https://github.com/dten/computus"
 keywords = ["easter", "date", "calendar", "gregorian", "julian"]
 readme = "README.md"
 license = "MIT"
+edition = "2021"
 
 [dependencies]

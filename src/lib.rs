@@ -18,9 +18,9 @@ impl Date {
 const OUT_OF_RANGE_ERR: &'static str = "Computus is only valid from 1583 to 9999";
 
 /// Easter in the Gregorian calendar
-pub fn gregorian(year: i32) -> Result<::Date, &'static str> {
+pub fn gregorian(year: i32) -> Result<Date, &'static str> {
     if year < 1583 || year > 9999 {
-        return Err(::OUT_OF_RANGE_ERR);
+        return Err(OUT_OF_RANGE_ERR);
     }
     let aa = year % 19;
     let bb = year / 100;
@@ -36,13 +36,13 @@ pub fn gregorian(year: i32) -> Result<::Date, &'static str> {
     let mm = (aa + 11 * hh + 22 * ll) / 451;
     let month = (hh + ll - 7 * mm + 114) / 31;
     let day = (hh + ll - 7 * mm + 114) % 31 + 1;
-    Ok(::Date::ymd(year, month as u32, day as u32))
+    Ok(Date::ymd(year, month as u32, day as u32))
 }
 
 /// Easter in the Julian calendar
-pub fn julian(year: i32) -> Result<::Date, &'static str> {
+pub fn julian(year: i32) -> Result<Date, &'static str> {
     if year < 1583 || year > 9999 {
-        return Err(::OUT_OF_RANGE_ERR);
+        return Err(OUT_OF_RANGE_ERR);
     }
     let aa = year % 4;
     let bb = year % 7;
@@ -52,7 +52,7 @@ pub fn julian(year: i32) -> Result<::Date, &'static str> {
     let ff = dd + ee + 114;
     let month = ff / 31;
     let day = ff % 31 + 1;
-    Ok(::Date::ymd(year, month as u32, day as u32))
+    Ok(Date::ymd(year, month as u32, day as u32))
 }
 
 #[cfg(test)]
