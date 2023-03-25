@@ -1,3 +1,6 @@
+#[cfg(test)]
+use rstest_reuse;
+
 #[derive(Debug, Eq, PartialEq)]
 pub struct Date {
     pub year: i32,
@@ -57,69 +60,78 @@ pub fn julian(year: i32) -> Result<Date, &'static str> {
 
 #[cfg(test)]
 mod tests {
-    #[test]
-    fn gregorian_month_day() {
+    use rstest::rstest;
+    use rstest_reuse::{apply, template};
+
+    #[template]
+    #[rstest]
+    #[case(1961, 4, 2)]
+    #[case(1996, 4, 7)]
+    #[case(1997, 3, 30)]
+    #[case(1998, 4, 12)]
+    #[case(2000, 4, 23)]
+    #[case(2001, 4, 15)]
+    #[case(2002, 3, 31)]
+    #[case(2003, 4, 20)]
+    #[case(2004, 4, 11)]
+    #[case(2005, 3, 27)]
+    #[case(2006, 4, 16)]
+    #[case(2007, 4, 8)]
+    #[case(2008, 3, 23)]
+    #[case(2009, 4, 12)]
+    #[case(2010, 4, 4)]
+    #[case(2011, 4, 24)]
+    #[case(2012, 4, 8)]
+    #[case(2013, 3, 31)]
+    #[case(2014, 4, 20)]
+    #[case(2015, 4, 5)]
+    #[case(2016, 3, 27)]
+    #[case(2017, 4, 16)]
+    #[case(2018, 4, 1)]
+    #[case(2019, 4, 21)]
+    #[case(2020, 4, 12)]
+    #[case(2021, 4, 4)]
+    #[case(2022, 4, 17)]
+    #[case(3035, 4, 19)]
+    #[case(4000, 4, 9)]
+    #[case(9999, 3, 28)]
+    fn gregorian_data(#[case] y: i32, #[case] m: u32, #[case] d: u32) {}
+
+    #[apply(gregorian_data)]
+    fn gregorian_month_day(y: i32, m: u32, d: u32) {
         use super::{gregorian, Date};
-        assert_eq!(gregorian(1961), Ok(Date::ymd(1961, 4, 2)));
-        assert_eq!(gregorian(1996), Ok(Date::ymd(1996, 4, 7)));
-        assert_eq!(gregorian(1997), Ok(Date::ymd(1997, 3, 30)));
-        assert_eq!(gregorian(1998), Ok(Date::ymd(1998, 4, 12)));
-        assert_eq!(gregorian(2000), Ok(Date::ymd(2000, 4, 23)));
-        assert_eq!(gregorian(2001), Ok(Date::ymd(2001, 4, 15)));
-        assert_eq!(gregorian(2002), Ok(Date::ymd(2002, 3, 31)));
-        assert_eq!(gregorian(2003), Ok(Date::ymd(2003, 4, 20)));
-        assert_eq!(gregorian(2004), Ok(Date::ymd(2004, 4, 11)));
-        assert_eq!(gregorian(2005), Ok(Date::ymd(2005, 3, 27)));
-        assert_eq!(gregorian(2006), Ok(Date::ymd(2006, 4, 16)));
-        assert_eq!(gregorian(2007), Ok(Date::ymd(2007, 4, 8)));
-        assert_eq!(gregorian(2008), Ok(Date::ymd(2008, 3, 23)));
-        assert_eq!(gregorian(2009), Ok(Date::ymd(2009, 4, 12)));
-        assert_eq!(gregorian(2010), Ok(Date::ymd(2010, 4, 4)));
-        assert_eq!(gregorian(2011), Ok(Date::ymd(2011, 4, 24)));
-        assert_eq!(gregorian(2012), Ok(Date::ymd(2012, 4, 8)));
-        assert_eq!(gregorian(2013), Ok(Date::ymd(2013, 3, 31)));
-        assert_eq!(gregorian(2014), Ok(Date::ymd(2014, 4, 20)));
-        assert_eq!(gregorian(2015), Ok(Date::ymd(2015, 4, 5)));
-        assert_eq!(gregorian(2016), Ok(Date::ymd(2016, 3, 27)));
-        assert_eq!(gregorian(2017), Ok(Date::ymd(2017, 4, 16)));
-        assert_eq!(gregorian(2018), Ok(Date::ymd(2018, 4, 1)));
-        assert_eq!(gregorian(2019), Ok(Date::ymd(2019, 4, 21)));
-        assert_eq!(gregorian(2020), Ok(Date::ymd(2020, 4, 12)));
-        assert_eq!(gregorian(2021), Ok(Date::ymd(2021, 4, 4)));
-        assert_eq!(gregorian(2022), Ok(Date::ymd(2022, 4, 17)));
-        assert_eq!(gregorian(3035), Ok(Date::ymd(3035, 4, 19)));
-        assert_eq!(gregorian(4000), Ok(Date::ymd(4000, 4, 9)));
-        assert_eq!(gregorian(9999), Ok(Date::ymd(9999, 3, 28)));
+        assert_eq!(gregorian(y), Ok(Date::ymd(y, m, d)));
     }
 
-    #[test]
-    fn julian_month_day() {
+    #[rstest]
+    #[case(1961, 3, 27)]
+    #[case(1996, 4, 1)]
+    #[case(1997, 4, 14)]
+    #[case(1998, 4, 6)]
+    #[case(1999, 3, 29)]
+    #[case(2000, 4, 17)]
+    #[case(2001, 4, 2)]
+    #[case(2002, 4, 22)]
+    #[case(2003, 4, 14)]
+    #[case(2004, 3, 29)]
+    #[case(2005, 4, 18)]
+    #[case(2006, 4, 10)]
+    #[case(2007, 3, 26)]
+    #[case(2008, 4, 14)]
+    #[case(2009, 4, 6)]
+    #[case(2010, 3, 22)]
+    #[case(2011, 4, 11)]
+    #[case(2012, 4, 2)]
+    #[case(2013, 4, 22)]
+    #[case(2014, 4, 7)]
+    #[case(2015, 3, 30)]
+    #[case(2016, 4, 18)]
+    #[case(2017, 4, 3)]
+    #[case(2018, 3, 26)]
+    #[case(2019, 4, 15)]
+    #[case(2020, 4, 6)]
+    fn julian_month_day(#[case] y: i32, #[case] m: u32, #[case] d: u32) {
         use super::{julian, Date};
-        assert_eq!(julian(1961), Ok(Date::ymd(1961, 3, 27)));
-        assert_eq!(julian(1996), Ok(Date::ymd(1996, 4, 1)));
-        assert_eq!(julian(1997), Ok(Date::ymd(1997, 4, 14)));
-        assert_eq!(julian(1998), Ok(Date::ymd(1998, 4, 6)));
-        assert_eq!(julian(1999), Ok(Date::ymd(1999, 3, 29)));
-        assert_eq!(julian(2000), Ok(Date::ymd(2000, 4, 17)));
-        assert_eq!(julian(2001), Ok(Date::ymd(2001, 4, 2)));
-        assert_eq!(julian(2002), Ok(Date::ymd(2002, 4, 22)));
-        assert_eq!(julian(2003), Ok(Date::ymd(2003, 4, 14)));
-        assert_eq!(julian(2004), Ok(Date::ymd(2004, 3, 29)));
-        assert_eq!(julian(2005), Ok(Date::ymd(2005, 4, 18)));
-        assert_eq!(julian(2006), Ok(Date::ymd(2006, 4, 10)));
-        assert_eq!(julian(2007), Ok(Date::ymd(2007, 3, 26)));
-        assert_eq!(julian(2008), Ok(Date::ymd(2008, 4, 14)));
-        assert_eq!(julian(2009), Ok(Date::ymd(2009, 4, 6)));
-        assert_eq!(julian(2010), Ok(Date::ymd(2010, 3, 22)));
-        assert_eq!(julian(2011), Ok(Date::ymd(2011, 4, 11)));
-        assert_eq!(julian(2012), Ok(Date::ymd(2012, 4, 2)));
-        assert_eq!(julian(2013), Ok(Date::ymd(2013, 4, 22)));
-        assert_eq!(julian(2014), Ok(Date::ymd(2014, 4, 7)));
-        assert_eq!(julian(2015), Ok(Date::ymd(2015, 3, 30)));
-        assert_eq!(julian(2016), Ok(Date::ymd(2016, 4, 18)));
-        assert_eq!(julian(2017), Ok(Date::ymd(2017, 4, 3)));
-        assert_eq!(julian(2018), Ok(Date::ymd(2018, 3, 26)));
-        assert_eq!(julian(2019), Ok(Date::ymd(2019, 4, 15)));
-        assert_eq!(julian(2020), Ok(Date::ymd(2020, 4, 6)));
+        assert_eq!(julian(y), Ok(Date::ymd(y, m, d)));
     }
 }
