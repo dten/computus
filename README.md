@@ -10,20 +10,22 @@ Add this to your Cargo.toml:
 
 ```toml
 [dependencies]
-computus = "^0.1"
+computus = "1.1.0"
 ```
 
-and this to your crate root:
-
-```rust
-extern crate computus;
-```
-
-then you can find when Easter is for a particular year with:
+You can find when Easter Sunday is for a particular year with:
 
 ```rust
 // For Gregorian calendars
-let (month, day) = computus::gregorian::month_day(2016);
+let easter = computus::gregorian(2016).unwrap();
+assert_eq!((easter.month, easter.day), (3, 27));
 // For Julian calendars
-let (month, day) = computus::julian::month_day(2016);
+let easter = computus::julian(2016).unwrap();
+assert_eq!((easter.month, easter.day), (4, 18));
+// With `chrono` feature
+#[cfg(feature = "chrono")] {
+    use chrono::Datelike;
+    let easter = computus::gregorian_naive(2023).unwrap();
+    assert_eq!((easter.month(), easter.day()), (4, 9));
+}
 ```
