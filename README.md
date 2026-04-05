@@ -28,4 +28,10 @@ assert_eq!((easter.month, easter.day), (4, 18));
     let easter = computus::gregorian_naive(2023).unwrap();
     assert_eq!((easter.month(), easter.day()), (4, 9));
 }
+// With `jiff` feature
+#[cfg(feature = "jiff")] {
+    use jiff::civil::Date;
+    let easter = computus::gregorian_jiff_date(2023).unwrap();
+    assert_eq!((easter.month(), easter.day()), (4, 9));
+}
 ```
