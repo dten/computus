@@ -10,7 +10,7 @@ Add this to your Cargo.toml:
 
 ```toml
 [dependencies]
-computus = "1.1.0"
+computus = "2.0.0"
 ```
 
 You can find when Easter Sunday is for a particular year with:
