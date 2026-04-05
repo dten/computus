@@ -1,17 +1,18 @@
 //! ### Overview
-//! 
+//!
 //! Calculate the date of Easter Sunday in Gregorian/Julian calendar using the [computus](https://simple.wikipedia.org/wiki/Computus) method.
-//! 
+//!
 //! ### Features
 //!
 //! Optional features:
 //!
 //! - [`chrono`][]: Enable directly producing a `chrono::NaiveDate`
+//! - [`jiff`][]: Enable directly producing a `jiff::civil::Date`
 //!
 //! ### Example
-//! 
+//!
 //! You can find when Easter is for a particular year with:
-//! 
+//!
 //! ```rust
 //! // For Gregorian calendars
 //! let easter = computus::gregorian(2016).unwrap();
@@ -25,8 +26,15 @@
 //!     let easter = computus::gregorian_naive(2023).unwrap();
 //!     assert_eq!((easter.month(), easter.day()), (4, 9));
 //! }
+//! // With `jiff` feature
+//! #[cfg(feature = "jiff")] {
+//!     use jiff::civil::Date;
+//!     let easter = computus::gregorian_jiff_date(2023).unwrap();
+//!     assert_eq!((easter.month(), easter.day()), (4, 9));
+//! }
 //! ```
-//! 
+//!
+#![no_std]
 
 #[cfg(test)]
 use rstest_reuse;
@@ -38,8 +46,11 @@ pub struct Date {
     pub day: u32,
 }
 
+#[derive(Debug, Eq, PartialEq)]
+pub struct OutOfRangeErr(i32);
+
 impl Date {
-    pub fn ymd(y: i32, m: u32, d: u32) -> Self {
+    pub const fn ymd(y: i32, m: u32, d: u32) -> Self {
         Date {
             year: y,
             month: m,
@@ -48,12 +59,22 @@ impl Date {
     }
 }
 
-const OUT_OF_RANGE_ERR: &'static str = "Computus is only valid from 1583 to 9999";
+impl core::fmt::Display for OutOfRangeErr {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        write!(
+            f,
+            "Computus is only valid from 1583 to 9999, got {}",
+            self.0,
+        )
+    }
+}
+
+impl core::error::Error for OutOfRangeErr {}
 
 /// Easter in the Gregorian calendar
-pub fn gregorian(year: i32) -> Result<Date, &'static str> {
+pub const fn gregorian(year: i32) -> Result<Date, OutOfRangeErr> {
     if year < 1583 || year > 9999 {
-        return Err(OUT_OF_RANGE_ERR);
+        return Err(OutOfRangeErr(year));
     }
     let aa = year % 19;
     let bb = year / 100;
@@ -73,9 +94,9 @@ pub fn gregorian(year: i32) -> Result<Date, &'static str> {
 }
 
 /// Easter in the Julian calendar
-pub fn julian(year: i32) -> Result<Date, &'static str> {
+pub const fn julian(year: i32) -> Result<Date, OutOfRangeErr> {
     if year < 1583 || year > 9999 {
-        return Err(OUT_OF_RANGE_ERR);
+        return Err(OutOfRangeErr(year));
     }
     let aa = year % 4;
     let bb = year % 7;
@@ -90,9 +111,15 @@ pub fn julian(year: i32) -> Result<Date, &'static str> {
 
 /// Easter in the Gregorian calendar. Requires `chrono` feature to provide a `chrono::NaiveDate`.
 #[cfg(feature = "chrono")]
-pub fn gregorian_naive(year: i32) -> Result<chrono::NaiveDate, &'static str> {
+pub fn gregorian_naive(year: i32) -> Result<chrono::NaiveDate, OutOfRangeErr> {
     let Date { year, month, day } = gregorian(year)?;
-    chrono::NaiveDate::from_ymd_opt(year, month, day).ok_or("invalid date")
+    Ok(chrono::NaiveDate::from_ymd_opt(year, month, day).unwrap())
+}
+
+#[cfg(feature = "jiff")]
+pub fn gregorian_jiff_date(year: i32) -> Result<jiff::civil::Date, OutOfRangeErr> {
+    let Date { year, month, day } = gregorian(year)?;
+    Ok(jiff::civil::Date::new(year as i16, month as i8, day as i8).unwrap())
 }
 
 #[cfg(test)]
@@ -146,6 +173,15 @@ mod tests {
         assert_eq!(
             super::gregorian_naive(y),
             Ok(chrono::NaiveDate::from_ymd_opt(y, m, d).unwrap())
+        );
+    }
+
+    #[cfg(feature = "jiff")]
+    #[apply(gregorian_data)]
+    fn into_jiff(y: i32, m: i8, d: i8) {
+        assert_eq!(
+            super::gregorian_jiff_date(y),
+            Ok(jiff::civil::Date::new(y as i16, m, d).unwrap()),
         );
     }
 
