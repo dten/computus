@@ -1,17 +1,18 @@
 //! ### Overview
-//! 
+//!
 //! Calculate the date of Easter Sunday in Gregorian/Julian calendar using the [computus](https://simple.wikipedia.org/wiki/Computus) method.
-//! 
+//!
 //! ### Features
 //!
 //! Optional features:
 //!
 //! - [`chrono`][]: Enable directly producing a `chrono::NaiveDate`
+//! - [`jiff`][]: Enable directly producing a `jiff::civil::Date`
 //!
 //! ### Example
-//! 
+//!
 //! You can find when Easter is for a particular year with:
-//! 
+//!
 //! ```rust
 //! // For Gregorian calendars
 //! let easter = computus::gregorian(2016).unwrap();
@@ -25,8 +26,14 @@
 //!     let easter = computus::gregorian_naive(2023).unwrap();
 //!     assert_eq!((easter.month(), easter.day()), (4, 9));
 //! }
+//! // With `jiff` feature
+//! #[cfg(feature = "jiff")] {
+//!     use jiff::civil::Date;
+//!     let easter = computus::gregorian_jiff_date(2023).unwrap();
+//!     assert_eq!((easter.month(), easter.day()), (4, 9));
+//! }
 //! ```
-//! 
+//!
 #![no_std]
 
 #[cfg(test)]
