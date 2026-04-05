@@ -36,9 +36,6 @@
 //!
 #![no_std]
 
-#[cfg(test)]
-use rstest_reuse;
-
 #[derive(Debug, Eq, PartialEq)]
 pub struct Date {
     pub year: i32,
